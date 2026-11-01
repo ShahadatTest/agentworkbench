@@ -116,6 +116,19 @@ def test_notes_memory_and_search(client):
     assert "use SQLite" in other.get("/export/notes.md", headers=h).text
 
 
+def test_api_todos_across_projects(client):
+    token = client.post("/admin/tokens", data={"name": "t6"}).text.split('class="token">')[1].split("<")[0]
+    other = TestClient(app, follow_redirects=False)
+    h = {"Authorization": f"Bearer {token}"}
+    other.post("/api/projects/demo-app/todos", json={"text": "Urgent thing", "prio": 1}, headers=h)
+    other.post("/api/projects/demo-app/todos", json={"text": "Later thing", "prio": 3}, headers=h)
+    urgent = other.get("/api/todos?prio=1", headers=h).text
+    assert "[demo-app] (P1) Urgent thing" in urgent and "Later thing" not in urgent
+    assert "Later thing" in other.get("/api/todos", headers=h).text
+    assert other.get("/api/todos?project=nope", headers=h).text == "no open tasks"
+    assert other.get("/api/todos").status_code == 401
+
+
 def test_docs_render_edit_and_sanitize(client):
     token = client.post("/admin/tokens", data={"name": "t5"}).text.split('class="token">')[1].split("<")[0]
     other = TestClient(app, follow_redirects=False)

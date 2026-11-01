@@ -1,0 +1,27 @@
+[
+  {
+    "id": "p1-all",
+    "question": "Which open tasks with priority 1 (P1) exist across all projects? List every one.",
+    "must_contain": ["order form", "reminder e-mail", "time zone", "restore test", "heating curve"]
+  },
+  {
+    "id": "most-p1",
+    "question": "Which project has the most open P1 tasks, and how many?",
+    "must_contain": ["dental", "2"]
+  },
+  {
+    "id": "paused-open",
+    "question": "Which paused projects still have open tasks? Name the project and the task.",
+    "must_contain": ["wiki", "onboarding checklist"]
+  },
+  {
+    "id": "decision",
+    "question": "Why did we decide against online payment on the bakery website?",
+    "must_contain": ["pick", "fees"]
+  },
+  {
+    "id": "start-work",
+    "question": "I start working on the NAS backup project now. Where does it run, and what must I never do during a restore?",
+    "must_contain": ["synology", "original folder"]
+  }
+]

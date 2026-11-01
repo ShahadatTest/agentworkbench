@@ -151,6 +151,12 @@ Returns the document as Markdown text, starting with its title as heading.
 
 Replace title and body: `{"title": "...", "body": "..."}`. Read the document first and send back the full text.
 
+## Open tasks across projects
+
+### `GET /api/todos?prio=2&project=slug&kind=todo`
+
+Plain text, one open task per line: `#42 [slug] (P1) text`, most urgent first. All parameters are optional: `prio` is the lowest priority to include (default 3, so everything), `project` limits to one project, `kind` is `todo` (default) or `idee`. Answers `no open tasks` if nothing matches. Use it to answer cross-project questions without opening every briefing.
+
 ## Search
 
 ### `GET /api/search?q=term`

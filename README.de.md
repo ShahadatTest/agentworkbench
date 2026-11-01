@@ -1,21 +1,23 @@
 # AgentWorkbench
 
 [![CI](https://github.com/thom7e/agentworkbench/actions/workflows/ci.yml/badge.svg)](https://github.com/thom7e/agentworkbench/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Self-hosted](https://img.shields.io/badge/self--hosted-FastAPI%20%2B%20SQLite-informational)
 
 [English](README.md) · Deutsch
 
-**Eine gemeinsame Sicht auf alle Projekte, für dich und deine KI-Agenten. Deine Agenten lesen nicht mehr ganze Dateien, sondern starten mit etwa 100 bis 400 Tokens Kontext.**
+**Eine gemeinsame Sicht auf alle Projekte, für dich und deine KI-Agenten. Agenten beantworten Projektfragen mit etwa 35 bis 45 % weniger Tokens und weniger Schritten, bei gleicher Treffsicherheit.**
 
-> **Warum das Tokens spart**
-> Ohne gemeinsames Gedächtnis liest jeder Agent zu Beginn Notizen, TODO-Dateien und alte Chats: schnell 5.000 bis 20.000 Tokens, und beim nächsten Mal wieder. AgentWorkbench gibt dem Agenten stattdessen ein kurzes Briefing pro Projekt.
+> **Gemessen, nicht geschätzt.** Dieselben fünf Projektfragen, einmal aus Markdown-Notizen und einmal über AgentWorkbench, gleiches Modell, 25 Läufe je Zeile:
 >
-> | Gemessen an einer echten Instanz (89 Projekte, 90 Dokumente) | Tokens |
-> |---|---|
-> | Übersicht aller Projekte | etwa 1.700 |
-> | Briefing eines Projekts, Median / Durchschnitt | etwa 120 / 420 |
-> | Dokumente, nur bei Bedarf gelesen (Durchschnitt je Dokument) | etwa 2.600 |
+> | Projekte | Variante | Richtig | Tokens je Frage | Schritte | Kosten |
+> |---|---|---|---|---|---|
+> | 12 | Markdown-Dateien | 24 / 25 | 18.300 | 3,7 | 0,0076 $ |
+> | 12 | **AgentWorkbench** | 25 / 25 | **9.800** (-47 %) | 2,8 | 0,0055 $ (-28 %) |
+> | 60 | Markdown-Dateien | 25 / 25 | 18.900 | 4,0 | 0,0121 $ |
+> | 60 | **AgentWorkbench** | 25 / 25 | **12.000** (-36 %) | 2,8 | 0,0076 $ (-37 %) |
 >
-> Geschätzte Ersparnis: **etwa 90 % der Kontext-Tokens pro Sitzung**, von 5.000 bis 20.000 auf wenige hundert. Prüfregeln und Morgen-Briefing laufen ganz ohne KI und kosten keine Tokens. (Die Ersparnis ist eine Schätzung auf Basis typischer Notiz- und TODO-Dateien. Die Größen sind gemessen, 1 Token wird mit 3,6 Zeichen gerechnet.)
+> Der Gewinn ist bei Fragen über mehrere Projekte am größten ("was ist überall dringend?"). Eine einzelne Notiz nachzuschlagen ist ein Unentschieden. Die Testdaten sind klein und die Vergleichsdateien aufgeräumt, nimm es also als Anhaltspunkt. Methode, Einschränkungen und Nachstellen: [Benchmark](benchmark/README.md).
 
 AgentWorkbench ist ein kleines Dashboard zum Selbsthosten. Du öffnest es morgens (oder bekommst es als Benachrichtigung) und siehst, was zählt: was live und beim Kunden ist, was dringend ist, was deine Agenten getan haben und was sich auf GitHub geändert hat. Agenten wie [Claude Code](https://claude.com/claude-code) lesen vor der Arbeit ein kurzes Briefing, haken Aufgaben ab und hinterlassen Notizen für das nächste Mal. So muss nichts zweimal erklärt werden.
 
@@ -101,6 +103,7 @@ Anmelden mit `demo-password-123`. Die Demo enthält erfundene Projekte, einen Po
 | [Proxmox-Anbindung](docs/de/proxmox.md) | Lesender Token, Projekte mit Containern verknüpfen |
 | [Betrieb](docs/de/deployment.md) | Docker, systemd, HTTPS, Zeitgeber, Backups, Updates, Passwort zurücksetzen |
 | [Sicherheit](docs/de/security.md) | Was geschützt ist und was nicht |
+| [Benchmark](benchmark/README.md#deutsch) | Tokens, Schritte und Kosten für Agenten: Dateien gegen AgentWorkbench, Methode und Einschränkungen |
 | [Entwicklung](docs/de/development.md) | Aufbau, Tests, Übersetzungen, Screenshots |
 
 Jede Anleitung gibt es auch auf Englisch im Ordner [`docs`](docs).

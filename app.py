@@ -629,6 +629,19 @@ def api_note_put(nid: int, n: NoteIn):
     return {"ok": True}
 
 
+@app.get("/api/todos", response_class=PlainTextResponse)
+def api_todos(prio: int = 3, project: str = "", kind: str = "todo"):
+    sql = ("SELECT t.id, t.project, t.prio, t.text FROM todos t JOIN projects p ON p.slug=t.project "
+           "WHERE t.done=0 AND t.kind=? AND t.prio<=?")
+    args = [kind, prio]
+    if project:
+        sql += " AND t.project=?"
+        args.append(project)
+    with closing(db()) as con:
+        rows = con.execute(sql + " ORDER BY t.prio, p.sort, t.id", args).fetchall()
+    return "\n".join(f"#{r['id']} [{r['project']}] (P{r['prio']}) {r['text']}" for r in rows) or "no open tasks"
+
+
 @app.get("/api/search", response_class=PlainTextResponse)
 def api_search(q: str):
     with closing(db()) as con:

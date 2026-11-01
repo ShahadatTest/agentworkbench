@@ -1,21 +1,23 @@
 # AgentWorkbench
 
 [![CI](https://github.com/thom7e/agentworkbench/actions/workflows/ci.yml/badge.svg)](https://github.com/thom7e/agentworkbench/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Self-hosted](https://img.shields.io/badge/self--hosted-FastAPI%20%2B%20SQLite-informational)
 
 English · [Deutsch](README.de.md)
 
-**One shared view of all your projects, for you and your AI agents. Your agents stop re-reading files and start with about 100 to 400 tokens of context.**
+**One shared view of all your projects, for you and your AI agents. Agents answer project questions with about 35 to 45 % fewer tokens and fewer steps, at the same accuracy.**
 
-> **Why it saves tokens**
-> Without shared memory, every agent session starts by reading notes, TODO files and old chats: easily 5,000 to 20,000 tokens, and the same again next time. AgentWorkbench hands the agent one short briefing per project instead.
+> **Measured, not guessed.** The same five project questions, once from Markdown notes and once through AgentWorkbench, same model, 25 runs per row:
 >
-> | Measured on a real instance (89 projects, 90 documents) | Tokens |
-> |---|---|
-> | Overview of all projects | about 1,700 |
-> | Briefing of one project, median / average | about 120 / 420 |
-> | Documents, read only when needed (average, per document) | about 2,600 |
+> | Projects | Variant | Correct | Tokens per question | Steps | Cost |
+> |---|---|---|---|---|---|
+> | 12 | Markdown files | 24 / 25 | 18,300 | 3.7 | $0.0076 |
+> | 12 | **AgentWorkbench** | 25 / 25 | **9,800** (-47 %) | 2.8 | $0.0055 (-28 %) |
+> | 60 | Markdown files | 25 / 25 | 18,900 | 4.0 | $0.0121 |
+> | 60 | **AgentWorkbench** | 25 / 25 | **12,000** (-36 %) | 2.8 | $0.0076 (-37 %) |
 >
-> Estimated saving: **roughly 90 % of the context tokens per session**, from 5,000 to 20,000 down to a few hundred. Machine checks and the morning briefing run without any AI, so they cost no tokens at all. (The saving is an estimate based on typical note and TODO files. The sizes are measured, 1 token is counted as 3.6 characters.)
+> The gain is largest for questions that span projects ("what is urgent everywhere?"). Looking up one note is a tie. The test data is small and the baseline files are tidy, so read it as an indication. Method, caveats and how to reproduce: [benchmark](benchmark/README.md).
 
 AgentWorkbench is a small self-hosted dashboard. You open it in the morning (or get it as a notification) and see what matters: what is live and at the customer, what is urgent, what your agents did and what changed on GitHub. Agents such as [Claude Code](https://claude.com/claude-code) read a short briefing before they start, tick off tasks and leave notes for the next time, so nothing has to be re-explained.
 
@@ -101,6 +103,7 @@ Sign in with `demo-password-123`. The demo contains fictional projects, an inbox
 | [Proxmox integration](docs/proxmox.md) | Read-only token, linking projects to containers |
 | [Deployment](docs/deployment.md) | Docker, systemd, HTTPS, timers, backups, updates, password reset |
 | [Security](docs/security.md) | What is protected, what is not |
+| [Benchmark](benchmark/README.md) | Tokens, steps and cost for agents: files vs. AgentWorkbench, method and caveats |
 | [Development](docs/development.md) | Project layout, tests, translations, screenshots |
 
 Every guide is also available in German in [`docs/de`](docs/de).
@@ -112,6 +115,9 @@ An agent needs to know what is open, what was decided and where something runs, 
 ```bash
 # Before work: what is open, what should I know?
 curl -H "Authorization: Bearer $TOKEN" https://your-host/api/projects/my-project
+
+# Urgent tasks across all projects, one line each
+curl -H "Authorization: Bearer $TOKEN" "https://your-host/api/todos?prio=1"
 
 # While working
 curl -X POST -H "Authorization: Bearer $TOKEN" https://your-host/api/todos/42/done
