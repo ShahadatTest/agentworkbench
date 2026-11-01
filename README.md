@@ -1,23 +1,83 @@
-# AgentWorkbench
-
 [![CI](https://github.com/thom7e/agentworkbench/actions/workflows/ci.yml/badge.svg)](https://github.com/thom7e/agentworkbench/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Self-hosted](https://img.shields.io/badge/self--hosted-FastAPI%20%2B%20SQLite-informational)
 
 English · [Deutsch](README.de.md)
 
-**One shared view of all your projects, for you and your AI agents. Agents answer project questions with about 35 to 45 % fewer tokens and fewer steps, at the same accuracy.**
+```text
+    ___                    __ _       __           __   __                    __
+   /   | ____ ____  ____  / /| |     / /___  _____/ /__/ /_  ___  ____  _____/ /_
+  / /| |/ __ `/ _ \/ __ \/ __/ | /| / / __ \/ ___/ //_/ __ \/ _ \/ __ \/ ___/ __ \
+ / ___ / /_/ /  __/ / / / /_ | |/ |/ / /_/ / /  / ,< / /_/ /  __/ / / / /__/ / / /
+/_/  |_\__, /\___/_/ /_/\__/ |__/|__/\____/_/  /_/|_/_.___/\___/_/ /_/\___/_/ /_/
+      /____/
+```
 
-> **Measured, not guessed.** The same five project questions, once from Markdown notes and once through AgentWorkbench, same model, 25 runs per row:
->
-> | Projects | Variant | Correct | Tokens per question | Steps | Cost |
-> |---|---|---|---|---|---|
-> | 12 | Markdown files | 24 / 25 | 18,300 | 3.7 | $0.0076 |
-> | 12 | **AgentWorkbench** | 25 / 25 | **9,800** (-47 %) | 2.8 | $0.0055 (-28 %) |
-> | 60 | Markdown files | 25 / 25 | 18,900 | 4.0 | $0.0121 |
-> | 60 | **AgentWorkbench** | 25 / 25 | **12,000** (-36 %) | 2.8 | $0.0076 (-37 %) |
->
-> The gain is largest for questions that span projects ("what is urgent everywhere?"). Looking up one note is a tie. The test data is small and the baseline files are tidy, so read it as an indication. Method, caveats and how to reproduce: [benchmark](benchmark/README.md).
+**One shared view of all your projects, for you and your AI agents.**
+Agents answer project questions with about 35 to 45 % fewer tokens and fewer steps, at the same accuracy.
+
+```text
+  ┌───────────────┐  push, briefing page   ┌──────────────────────────┐  briefing, tasks   ┌──────────────┐
+  │      you      │◄───────────────────────│     A G E N T            │◄──────────────────►│   AI agents  │
+  │ phone · web   │                        │     W O R K B E N C H    │  notes, log        │ Claude Code  │
+  │ desktop       │───── tick off, add ───►│  FastAPI + SQLite        │                    │ and friends  │
+  └───────────────┘                        └─────────────┬────────────┘                    └──────────────┘
+                                                         │ checks: HTTP · DNS · port
+                                                         ▼ close tasks by themselves
+                                           ┌──────────────────────────┐
+                                           │  your sites and servers  │
+                                           └──────────────────────────┘
+```
+
+What an agent gets before it starts (one short text per project):
+
+```text
+$ curl -H "Authorization: Bearer $TOKEN" https://your-host/api/projects/dental-booking
+
+# Dental Practice Booking (dental-booking) — aktiv
+Deploy: VPS
+Stack: Django, PostgreSQL
+
+## Recent notes
+### #5 2026-10-30 09:15 (user)
+The front desk wants to see the day list sorted by time, not by name.
+
+## Open
+- [ ] #6  (P1) Send a reminder e-mail 24 hours before the appointment
+- [ ] #24 (P1) Time zone bug: appointments after 23:00 are stored one day earlier
+- [ ] #7  (P2) Let patients cancel through a link in the e-mail
+
+## Log
+- 2026-10-30 16:15 Reminder e-mails drafted, waiting for the privacy text
+```
+
+Measured, not guessed: the same five project questions, once from Markdown notes and once through AgentWorkbench, same model, 25 runs per row. Method, caveats and how to reproduce: [benchmark](benchmark/README.md).
+
+```text
+  Tokens per question, lower is better
+
+  12 projects
+  Markdown files   █████████████████████████████████████    18,300
+  AgentWorkbench   ████████████████████                      9,800  -47 %
+
+  60 projects
+  Markdown files   ██████████████████████████████████████   18,900
+  AgentWorkbench   ████████████████████████                 12,000  -36 %
+```
+
+<details>
+<summary>Full table</summary>
+
+| Projects | Variant | Correct | Tokens per question | Steps | Cost |
+|---|---|---|---|---|---|
+| 12 | Markdown files | 24 / 25 | 18,300 | 3.7 | $0.0076 |
+| 12 | **AgentWorkbench** | 25 / 25 | **9,800** (-47 %) | 2.8 | $0.0055 (-28 %) |
+| 60 | Markdown files | 25 / 25 | 18,900 | 4.0 | $0.0121 |
+| 60 | **AgentWorkbench** | 25 / 25 | **12,000** (-36 %) | 2.8 | $0.0076 (-37 %) |
+
+The gain is largest for questions that span projects ("what is urgent everywhere?"). Looking up one note is a tie. The test data is small and the baseline files are tidy, so read it as an indication.
+
+</details>
 
 AgentWorkbench is a small self-hosted dashboard. You open it in the morning (or get it as a notification) and see what matters: what is live and at the customer, what is urgent, what your agents did and what changed on GitHub. Agents such as [Claude Code](https://claude.com/claude-code) read a short briefing before they start, tick off tasks and leave notes for the next time, so nothing has to be re-explained.
 
