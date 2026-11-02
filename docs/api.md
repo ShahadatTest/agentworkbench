@@ -153,9 +153,9 @@ Replace title and body: `{"title": "...", "body": "..."}`. Read the document fir
 
 ## Open tasks across projects
 
-### `GET /api/todos?prio=2&project=slug&kind=todo`
+### `GET /api/todos?prio=2&project=slug&kind=todo&status=open`
 
-Plain text, one open task per line: `#42 [slug] (P1) text`, most urgent first. All parameters are optional: `prio` is the lowest priority to include (default 3, so everything), `project` limits to one project, `kind` is `todo` (default) or `idee`. Answers `no open tasks` if nothing matches. Use it to answer cross-project questions without opening every briefing.
+Plain text, one task per line: `#42 [slug] (P1) text`, most urgent first. All parameters are optional: `prio` is the lowest priority to include (default 3, so everything), `project` limits to one project, `kind` is `todo` (default) or `idee`, `status` is `open` (default), `done`, or `all`. Answers `no open tasks` when `status=open` and nothing matches, otherwise `no tasks`. Use it to answer cross-project questions without opening every briefing.
 
 ## Search
 

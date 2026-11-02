@@ -153,9 +153,9 @@ Ersetzt Titel und Text: `{"title": "...", "body": "..."}`. Lies das Dokument zue
 
 ## Offene Aufgaben über alle Projekte
 
-### `GET /api/todos?prio=2&project=slug&kind=todo`
+### `GET /api/todos?prio=2&project=slug&kind=todo&status=open`
 
-Klartext, eine offene Aufgabe pro Zeile: `#42 [slug] (P1) Text`, die dringendsten zuerst. Alle Parameter sind optional: `prio` ist die niedrigste einzubeziehende Priorität (Standard 3, also alles), `project` beschränkt auf ein Projekt, `kind` ist `todo` (Standard) oder `idee`. Antwortet mit `no open tasks`, wenn nichts passt. So beantwortest du Fragen über mehrere Projekte, ohne jedes Briefing zu öffnen.
+Klartext, eine Aufgabe pro Zeile: `#42 [slug] (P1) Text`, die dringendsten zuerst. Alle Parameter sind optional: `prio` ist die niedrigste einzubeziehende Priorität (Standard 3, also alles), `project` beschränkt auf ein Projekt, `kind` ist `todo` (Standard) oder `idee`, `status` ist `open` (Standard), `done` oder `all`. Antwortet mit `no open tasks`, wenn `status=open` und nichts passt, sonst mit `no tasks`. So beantwortest du Fragen über mehrere Projekte, ohne jedes Briefing zu öffnen.
 
 ## Suche
 

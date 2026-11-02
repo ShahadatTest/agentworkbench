@@ -121,12 +121,22 @@ def test_api_todos_across_projects(client):
     other = TestClient(app, follow_redirects=False)
     h = {"Authorization": f"Bearer {token}"}
     other.post("/api/projects/demo-app/todos", json={"text": "Urgent thing", "prio": 1}, headers=h)
-    other.post("/api/projects/demo-app/todos", json={"text": "Later thing", "prio": 3}, headers=h)
+    later = other.post("/api/projects/demo-app/todos", json={"text": "Later thing", "prio": 3}, headers=h)
+    later_id = later.json()["id"]
     urgent = other.get("/api/todos?prio=1", headers=h).text
     assert "[demo-app] (P1) Urgent thing" in urgent and "Later thing" not in urgent
     assert "Later thing" in other.get("/api/todos", headers=h).text
     assert other.get("/api/todos?project=nope", headers=h).text == "no open tasks"
     assert other.get("/api/todos").status_code == 401
+    # status=open is the default; done/all can include finished tasks (#3).
+    assert "Later thing" in other.get("/api/todos?status=open", headers=h).text
+    assert "Later thing" not in other.get("/api/todos?status=done", headers=h).text
+    other.post(f"/api/todos/{later_id}/done", headers=h)
+    assert "Later thing" not in other.get("/api/todos", headers=h).text
+    assert "Later thing" in other.get("/api/todos?status=done", headers=h).text
+    both = other.get("/api/todos?status=all", headers=h).text
+    assert "Urgent thing" in both and "Later thing" in both
+    assert other.get("/api/todos?status=nope", headers=h).status_code == 400
 
 
 def test_docs_render_edit_and_sanitize(client):

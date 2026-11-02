@@ -630,16 +630,21 @@ def api_note_put(nid: int, n: NoteIn):
 
 
 @app.get("/api/todos", response_class=PlainTextResponse)
-def api_todos(prio: int = 3, project: str = "", kind: str = "todo"):
+def api_todos(prio: int = 3, project: str = "", kind: str = "todo", status: str = "open"):
+    status = (status or "open").lower()
+    if status not in ("open", "done", "all"):
+        raise HTTPException(400, detail="status must be open, done, or all")
+    done_sql = {"open": "t.done=0", "done": "t.done=1", "all": "1=1"}[status]
     sql = ("SELECT t.id, t.project, t.prio, t.text FROM todos t JOIN projects p ON p.slug=t.project "
-           "WHERE t.done=0 AND t.kind=? AND t.prio<=?")
+           f"WHERE {done_sql} AND t.kind=? AND t.prio<=?")
     args = [kind, prio]
     if project:
         sql += " AND t.project=?"
         args.append(project)
     with closing(db()) as con:
         rows = con.execute(sql + " ORDER BY t.prio, p.sort, t.id", args).fetchall()
-    return "\n".join(f"#{r['id']} [{r['project']}] (P{r['prio']}) {r['text']}" for r in rows) or "no open tasks"
+    empty = "no open tasks" if status == "open" else "no tasks"
+    return "\n".join(f"#{r['id']} [{r['project']}] (P{r['prio']}) {r['text']}" for r in rows) or empty
 
 
 @app.get("/api/search", response_class=PlainTextResponse)
