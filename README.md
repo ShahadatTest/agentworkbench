@@ -84,6 +84,9 @@ AgentWorkbench is a small self-hosted dashboard. You open it in the morning (or 
 One FastAPI process, one SQLite file, no build step. English and German interface, installable on your phone.
 
 <p align="center">
+  <img src="docs/images/demo.gif" alt="Short demo: tick off a task, open a project, the briefing and the search" width="860">
+</p>
+<p align="center">
   <img src="docs/images/dashboard-light.png" alt="Home page with the side menu, urgent tasks and recent activity" width="860">
 </p>
 <p align="center">

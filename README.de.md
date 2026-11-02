@@ -84,6 +84,9 @@ AgentWorkbench ist ein kleines Dashboard zum Selbsthosten. Du öffnest es morgen
 Ein FastAPI-Prozess, eine SQLite-Datei, kein Build-Schritt. Oberfläche auf Deutsch und Englisch, auf dem Handy als App installierbar.
 
 <p align="center">
+  <img src="docs/images/demo.gif" alt="Kurze Demo: Aufgabe abhaken, Projekt öffnen, Briefing und Suche" width="860">
+</p>
+<p align="center">
   <img src="docs/images/dashboard-light.png" alt="Startseite mit Seitenmenü, dringenden Aufgaben und Verlauf" width="860">
 </p>
 <p align="center">
